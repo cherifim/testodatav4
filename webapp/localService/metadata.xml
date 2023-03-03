@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="4.0" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_COMMON',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="com.sap.vocabularies.Common.v1" Alias="SAP__common"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_MEASURES',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="Org.OData.Measures.V1" Alias="SAP__measures"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_CORE',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="Org.OData.Core.V1" Alias="SAP__core"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_CAPABILITIES',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="Org.OData.Capabilities.V1" Alias="SAP__capabilities"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_AGGREGATION',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="Org.OData.Aggregation.V1" Alias="SAP__aggregation"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_VALIDATION',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="Org.OData.Validation.V1" Alias="SAP__validation"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_CODELIST',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="com.sap.vocabularies.CodeList.v1" Alias="SAP__CodeList"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_UI',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="com.sap.vocabularies.UI.v1" Alias="SAP__UI"/>
+    </edmx:Reference>
+    <edmx:DataServices>
+        <Schema Namespace="com.sap.gateway.default.ztest_mch_odata_v4_srv.v0001" Alias="SAP__self">
+            <EntityType Name="Address">
+                <Key>
+                    <PropertyRef Name="AddressId"/>
+                </Key>
+                <Property Name="AddressId" Type="Edm.Int16" Nullable="false"/>
+                <Property Name="Street" Type="Edm.String" Nullable="false"/>
+                <Property Name="StreetNumber" Type="Edm.Int16" Nullable="false"/>
+                <Property Name="ZipCode" Type="Edm.String" Nullable="false"/>
+                <Property Name="City" Type="Edm.String" Nullable="false"/>
+                <Property Name="Country" Type="Edm.String" Nullable="false"/>
+            </EntityType>
+            <EntityType Name="Person">
+                <Key>
+                    <PropertyRef Name="ID"/>
+                </Key>
+                <Property Name="ID" Type="Edm.Int16" Nullable="false"/>
+                <Property Name="FirstName" Type="Edm.String" Nullable="false" MaxLength="50"/>
+                <Property Name="LastName" Type="Edm.String" Nullable="false" MaxLength="50"/>
+                <Property Name="DateOfBirth" Type="Edm.Date" Nullable="false"/>
+                <NavigationProperty Name="Address" Type="com.sap.gateway.default.ztest_mch_odata_v4_srv.v0001.Address">
+                    <OnDelete Action="None"/>
+                </NavigationProperty>
+            </EntityType>
+            <EntityType Name="Team">
+                <Key>
+                    <PropertyRef Name="TeamId"/>
+                </Key>
+                <Property Name="TeamId" Type="Edm.Int16" Nullable="false"/>
+                <Property Name="Name" Type="Edm.String" Nullable="false" MaxLength="50"/>
+                <NavigationProperty Name="Persons" Type="Collection(com.sap.gateway.default.ztest_mch_odata_v4_srv.v0001.Person)">
+                    <OnDelete Action="None"/>
+                </NavigationProperty>
+            </EntityType>
+            <EntityContainer Name="Container">
+                <EntitySet Name="AddressSet" EntityType="com.sap.gateway.default.ztest_mch_odata_v4_srv.v0001.Address"/>
+                <EntitySet Name="PersonSet" EntityType="com.sap.gateway.default.ztest_mch_odata_v4_srv.v0001.Person">
+                    <NavigationPropertyBinding Path="Address" Target="AddressSet"/>
+                </EntitySet>
+                <EntitySet Name="TeamSet" EntityType="com.sap.gateway.default.ztest_mch_odata_v4_srv.v0001.Team">
+                    <NavigationPropertyBinding Path="Persons" Target="PersonSet"/>
+                </EntitySet>
+            </EntityContainer>
+            <Annotations Target="SAP__self.Container/AddressSet">
+                <Annotation Term="SAP__capabilities.UpdateRestrictions">
+                    <Record>
+                        <PropertyValue Property="QueryOptions">
+                            <Record>
+                                <PropertyValue Property="SelectSupported" Bool="true"/>
+                            </Record>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="SAP__self.Container/PersonSet">
+                <Annotation Term="SAP__capabilities.UpdateRestrictions">
+                    <Record>
+                        <PropertyValue Property="QueryOptions">
+                            <Record>
+                                <PropertyValue Property="SelectSupported" Bool="true"/>
+                            </Record>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="SAP__self.Container/TeamSet">
+                <Annotation Term="SAP__capabilities.UpdateRestrictions">
+                    <Record>
+                        <PropertyValue Property="QueryOptions">
+                            <Record>
+                                <PropertyValue Property="SelectSupported" Bool="true"/>
+                            </Record>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+            </Annotations>
+        </Schema>
+    </edmx:DataServices>
+</edmx:Edmx>

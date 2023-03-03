@@ -1,0 +1,107 @@
+<mvc:View xmlns:form="sap.ui.layout.form" controllerName="fr.stms.testodatav4.controller.Detail" xmlns="sap.m" xmlns:semantic="sap.f.semantic" xmlns:mvc="sap.ui.core.mvc">
+    <semantic:SemanticPage id="detailPage">
+        <semantic:titleHeading>
+            <Title text="{Name} ({TeamId})" level="H2" />
+        </semantic:titleHeading>
+        <semantic:content>
+            <VBox class="sapUiSmallMargin">
+
+                <Table id="lineItemsList" width="auto" 
+                       items="{Persons}"                                 
+                        updateFinished=".onListUpdateFinished" noDataText="{i18n>detailLineItemTableNoDataText}" selectionChange="onSelectionChange" mode="SingleSelectMaster">
+                    <headerToolbar>
+                        <Toolbar>
+                            <Title id="lineItemsTitle" text="{detailView>/lineItemListTitle}" titleStyle="H3" level="H3" />
+                        </Toolbar>
+                    </headerToolbar>
+                    <columns>
+                        <Column>
+                            <Text text="{i18n>detailLineItemTableIDColumn}" />
+                        </Column>
+                        <Column minScreenWidth="Tablet" demandPopin="true" hAlign="End">
+                            <Text text="{i18n>detailLineItemTableUnitNumberColumn}" />
+                        </Column>
+                    </columns>
+                    <items>
+                        <ColumnListItem type="Navigation">
+                            <cells>
+                                <ObjectIdentifier title="{FirstName} {LastName}" text="{ID}" />
+                                <ObjectNumber number="{DateOfBirth}" />
+                            </cells>
+                        </ColumnListItem>
+                    </items>
+                </Table>
+
+                <form:Form editable="true" id="formPerson" visible="{= %{SelectedPerson>ID} !== null &amp;&amp; %{SelectedPerson>ID} !== undefined }"> 
+                    <form:layout>
+                        <form:ResponsiveGridLayout labelSpanXL="4" labelSpanL="3" labelSpanM="4" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="4" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="1" columnsM="1" singleContainerFullSize="false" />
+                    </form:layout>
+                    <form:formContainers>
+                        <form:FormContainer>
+                            <form:formElements>
+                                <form:FormElement visible="true">
+                                    <form:label>
+                                        <Label text="First Name" design="Standard"  textAlign="Left" textDirection="Inherit" visible="true" wrapping="true" />
+                                    </form:label>
+                                    <form:fields>
+                                        <Input id="firstName" type="Text" required="false" maxLength="255" placeholder="First Name" value="{SelectedPerson>FirstName}" change="onChangeInputString"/>
+                                    </form:fields>
+                                </form:FormElement>
+
+                                <form:FormElement visible="true">
+                                    <form:label>
+                                        <Label text="Last Name" design="Standard"  textAlign="Left" textDirection="Inherit" visible="true" wrapping="true" />
+                                    </form:label>
+                                    <form:fields>
+                                        <Input id="lastName" type="Text" required="false" maxLength="255" placeholder="Last Name" value="{SelectedPerson>LastName}" change="onChangeInputString"/>
+                                    </form:fields>
+                                </form:FormElement>
+
+                                <form:FormElement visible="true">
+                                    <form:label>
+                                        <Label text="Date of borth" design="Standard"  textAlign="Left" textDirection="Inherit" visible="true" wrapping="true" />
+                                    </form:label>
+                                    <form:fields>
+                                        <DatePicker dateValue="{SelectedPerson>DateOfBirth}" required="false" textAlign="Left" textDirection="Inherit" visible="true" />
+                                    </form:fields>
+                                </form:FormElement>
+
+                                <form:FormElement visible="true">
+                                    <form:label>
+                                        <Label text="Age" design="Standard"  textAlign="Left" textDirection="Inherit" visible="true" wrapping="true" />
+                                    </form:label>
+                                    <form:fields>
+                                        <Text id="age" text="{SelectedPerson>Age}" />
+                                    </form:fields>
+                                </form:FormElement>
+
+
+                            </form:formElements>
+                        </form:FormContainer>
+                    </form:formContainers>
+                </form:Form>
+                <HBox>
+                    <Button text="Save" press="onSavePerson"/>
+                    <Button text="Create" press="onCreatePerson"/>
+                    <Button text="Cancel changes" press="onCancelChanges"/>
+                    <Button text="Delete selected" press="onDeletePerson" visible="{= %{SelectedPerson>ID} !== null &amp;&amp; %{SelectedPerson>ID} !== undefined }"/>
+                </HBox>
+            </VBox>
+        </semantic:content>
+        <!--Semantic ShareMenu Buttons-->
+        <semantic:sendEmailAction>
+            <semantic:SendEmailAction id="shareEmail" press=".onSendEmailPress" />
+        </semantic:sendEmailAction>
+
+        <semantic:closeAction>
+            <semantic:CloseAction id="closeColumn" press=".onCloseDetailPress" />
+        </semantic:closeAction>
+
+        <semantic:fullScreenAction>
+            <semantic:FullScreenAction id="enterFullScreen" visible="{= !${device>/system/phone} &amp;&amp; !${appView>/actionButtonsInfo/midColumn/fullScreen}}" press=".toggleFullScreen" />
+        </semantic:fullScreenAction>
+        <semantic:exitFullScreenAction>
+            <semantic:ExitFullScreenAction id="exitFullScreen" visible="{= !${device>/system/phone} &amp;&amp; ${appView>/actionButtonsInfo/midColumn/fullScreen}}" press=".toggleFullScreen" />
+        </semantic:exitFullScreenAction>
+    </semantic:SemanticPage>
+</mvc:View>
